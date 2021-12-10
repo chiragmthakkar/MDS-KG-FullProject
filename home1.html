@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+    <style type="text/css">
+        html, body {
+            font: 12pt arial;
+        }
+
+		#viz {
+			width: 900px;
+			height: 700px;
+			border: 1px solid lightgray;
+			font: 12pt arial;
+		}
+
+
+    </style>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{url_for('static', filename='style/style.css')}}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+
+
+    <script src="https://rawgit.com/neo4j-contrib/neovis.js/master/dist/neovis.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+
+    <script type="text/javascript">
+		// define config car
+		// instantiate nodevis object
+		// draw
+
+		var viz;
+
+		function draw() {
+			var config = {
+                container_id: "viz",
+                server_url: "bolt://localhost:7687",
+                server_user: "neo4j",
+                server_password: "pass",
+                server_database: "mds",
+                labels: {
+                    "Entity": {
+                        caption: 'name',
+                        size: 'pagerank',
+                        community:'community'
+                    }
+                },
+                relationships: {
+                    "RELATED": {
+                        caption: 'name',
+                        thickness: "count"
+                    }
+
+                },                
+				initial_cypher: "MATCH p=(:Entity)-[r:RELATED]->(:Entity) RETURN p LIMIT 25"				
+				// initial_cypher: "MATCH (n)-[r:RELATED]->(m) RETURN n,r,m"
+// MATCH p=(:Entity)-[r:RELATED]->(:Entity) RETURN p LIMIT 25				
+			};
+
+			viz = new NeoVis.default(config);
+			viz.render();
+			console.log(viz);
+
+		}
+    </script>
+
+</head>
+<body style="height:1500px" onload="draw()">
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header" style="margin-top:20px">
+      <!-- <a class="navbar-brand" href="#">Construction of Knowledge Graph using Green BIM Description</a> -->
+
+      <h1 style="color: white">Construction of Knowledge Graph using Green BIM Description</h1>
+    </div>
+<!--     <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#">Page 1</a></li>
+      <li><a href="#">Page 2</a></li>
+      <li><a href="#">Page 3</a></li>
+    </ul> -->
+  </div>
+</nav>
+  
+<!-- <div class="container" style="margin-top:50px">
+  <h3>Fixed Navbar</h3>
+  <div class="row">
+    <div class="col-md-4">
+      <p>A fixed navigation bar stays visible in a fixed position (top or bottom) independent of the page scroll.</p>
+      <p>A fixed navigation bar stays visible in a fixed position (top or bottom) independent of the page scroll.</p>    
+    </div>
+    <div class="col-md-4"> 
+      <p>A fixed navigation bar stays visible in a fixed position (top or bottom) independent of the page scroll.</p>
+      <p>A fixed navigation bar stays visible in a fixed position (top or bottom) independent of the page scroll.</p>
+    </div>
+    <div class="col-md-4"> 
+      <p>A fixed navigation bar stays visible in a fixed position (top or bottom) independent of the page scroll.</p>
+      <p>A fixed navigation bar stays visible in a fixed position (top or bottom) independent of the page scroll.</p> 
+    </div>
+  </div>
+</div> -->
+
+<!-- <h3>Please enter your cypher query</h3> -->
+
+
+    <div class="container mb-4 mt-5">
+
+        <section>
+            <p style="font-size: 16pt">
+            Please enter your cypher query
+            </p>
+
+        </section>
+        <!-- <p style="font-size: 16pt">Cypher query:</p> -->
+
+         <textarea rows="4" cols=100 id="cypher"></textarea><br>
+		<input type="submit" value="Submit" id="reload">
+		<input type="submit" value="Stabilize" id="stabilize">
+        <section>
+            <p style="color: white">
+            Welcome!
+            </p>
+
+        </section>
+
+<div id="viz"></div>
+
+
+</body>
+
+
+
+<script>
+	$("#reload").click(function() {
+
+		var cypher = $("#cypher").val();
+
+		if (cypher.length > 3) {
+			viz.renderWithCypher(cypher);
+		} else {
+			console.log("reload");
+			viz.reload();
+
+		}
+
+	});
+
+	$("#stabilize").click(function() {
+		viz.stabilize();
+	})
+
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous">
+    </script>
+
+</html>
