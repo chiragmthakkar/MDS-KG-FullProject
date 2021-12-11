@@ -68,7 +68,8 @@ There are two ways of installing/using OpenIE Stanza:
         
 
 
-![alt text](https://github.cs.adelaide.edu.au/a1806400/MDS-BIMKG/blob/master/wholeUI.png)
+![alt text](https://github.com/chiragmthakkar/MDS-KG-FullProject/blob/main/wholeUI.png)
+
 
 
 
